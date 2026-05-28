@@ -57,13 +57,15 @@ Access the main dashboard on `http://localhost:3008`.
 
 ---
 
-## 🌺 Powered by Pollinations.ai (Flower Tier Aspirant)
+## 🌺 Proudly Powered by Pollinations.ai
 
-The core generative magic behind **Akira Flow** is fundamentally driven by the incredible infrastructure of **[Pollinations.ai](https://pollinations.ai/)**. 
+At the heart of **Akira Flow's** generative capabilities lies the extraordinary infrastructure provided by **[Pollinations.ai](https://pollinations.ai/)**. 
 
-By utilizing Pollinations' seamless, fast, and highly reliable endpoints, Akira Flow is capable of executing complex generative tasks simultaneously without infrastructure bottlenecks. Specifically, we heavily rely on Pollinations for:
-*   **State-of-the-Art Image Synthesis**: Feeding our Image Agent with rapid, high-fidelity Flux generation capabilities.
-*   **Dynamic Video Generation**: Empowering our Video Composer Agent with cutting-edge cinematic AI sequences.
-*   **Diverse TTS & Audio Generation**: Routing our Voice Agent through Pollinations for diverse, realistic, and premium text-to-speech models.
+Our vision is to democratize high-quality video creation, and Pollinations makes this possible by offering seamless, lightning-fast, and open access to world-class AI models. By routing our multi-agent ecosystem through their API, we can orchestrate complex, simultaneous pipelines without friction. 
 
-We are deeply grateful for the open, accessible, and powerful API ecosystem that Pollinations has created. **Akira Flow is proud to be a heavy integrator of Pollinations.ai and aspires to secure the coveted "Flower Tier" approval to scale our multi-agent pipelines to the absolute maximum.**
+We rely on Pollinations' remarkable ecosystem to breathe life into our project:
+*   **Vivid Visuals**: Feeding our Image Agent with rapid, high-fidelity Flux generation for stunning scene composition.
+*   **Cinematic Motion**: Empowering our Video Composer with cutting-edge AI sequences that capture the perfect mood.
+*   **Lifelike Audio**: Driving our Voice Agent through diverse, expressive, and incredibly realistic text-to-speech models.
+
+We are deeply grateful to the Pollinations team for building such an accessible, developer-first platform. Their commitment to open AI infrastructure empowers creators like us to turn ambitious ideas into reality. Akira Flow simply wouldn't be the same without them.
