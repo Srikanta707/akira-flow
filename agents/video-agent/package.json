@@ -1,0 +1,14 @@
+{
+  "name": "akira-flow-video-agent",
+  "version": "1.0.0",
+  "description": "Video Agent for Akira Flow - Multi-Agent Video Factory",
+  "main": "app.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
+  }
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akira Flow - Voice Agent Studio</title>
+  <meta name="description" content="AI Voice Generation and Concatenation agent for Akira Flow. Multi-character dialogue synthesis and precise timeline merging.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo-container">
+      <h1 class="logo">Akira Flow</h1>
+      <span class="tagline">Create. Automate. Dominate.</span>
+      <div class="agent-badge">Agent 2 — Voice Agent</div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Left Column: Input Panel & Voice Settings -->
+    <section class="glass-panel">
+      <h2 class="section-title">Voice Configuration</h2>
+
+      <!-- Notification Bar -->
+      <div id="notification-bar" class="notification">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="notification-msg"></span>
+      </div>
+
+      <form id="generator-form">
+        <!-- Script JSON paste area -->
+        <div class="form-group">
+          <label for="script-json-input">Paste Script JSON (From Script Agent)</label>
+          <div class="input-glow-wrapper">
+            <textarea id="script-json-input" placeholder="Paste the complete JSON output from the Script Agent here..." required></textarea>
+          </div>
+          <div class="template-bar">
+            <button type="button" class="template-btn" id="load-template-btn">Load Demo Sci-Fi Script</button>
+            <button type="button" class="template-btn" id="load-reels-btn">Load Demo Reels Script</button>
+          </div>
+        </div>
+
+        <!-- Optional API Key -->
+        <div class="form-group">
+          <label for="api-key-input">Pollinations API Key (Required for AI voices)</label>
+          <div class="input-glow-wrapper">
+            <input type="password" id="api-key-input" placeholder="sk_xxxxxxxx (Saved in browser only)">
+          </div>
+        </div>
+
+        <!-- Dynamic Character Mapping Section -->
+        <div class="form-group">
+          <label style="margin-bottom: 0.5rem;">Character Voice Map</label>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.75rem;">Configure the voice style, speed, and provider for each character found in your script.</p>
+          <div class="characters-voices-container" id="characters-config-wrapper">
+            <!-- Populated dynamically when JSON is pasted/loaded -->
+            <div style="color: var(--text-muted); text-align: center; padding: 1.5rem; border: 1px dashed var(--border-color); border-radius: 8px;">
+              Paste or load a script JSON to configure character voices.
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="btn-3d-container">
+          <button type="submit" class="btn-3d" id="submit-btn" disabled>
+            <span>Synthesize Voice Over</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Right Column: Workspace / Generated Timelines -->
+    <section class="glass-panel output-container" id="preview-panel">
+      <!-- Loading Overlay -->
+      <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loading-status">Synthesizing audio...</div>
+      </div>
+
+      <h2 class="section-title">Agent Audio Workspace</h2>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <h3>No Voice Over Synthesized Yet</h3>
+        <p>Load a script JSON, select character voices, and click "Synthesize Voice Over" to trigger Agent 2.</p>
+      </div>
+
+      <!-- Main Results Dashboard -->
+      <div class="voice-dashboard" id="voice-dashboard">
+        <!-- Master Player -->
+        <div class="master-player-container">
+          <div class="player-title">🔊 Master Merged Audio Timeline</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Total Duration: <strong id="master-duration" style="color: var(--accent-cyan);">0.0s</strong></span>
+            <span style="font-size: 0.75rem; background: rgba(0, 212, 255, 0.1); color: var(--accent-cyan); padding: 0.1rem 0.4rem; border-radius: 4px; font-family: var(--font-title);">FFmpeg Synced</span>
+          </div>
+          <audio id="master-audio-player" controls>
+            <!-- Set dynamically by JS -->
+          </audio>
+        </div>
+
+        <h3 style="margin-bottom: 1rem; font-family: var(--font-title); font-size: 0.9rem; color: var(--text-primary); text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem;">Dialogue Track Breakdown</h3>
+        <div class="scenes-audio-list" id="scenes-audio-container">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

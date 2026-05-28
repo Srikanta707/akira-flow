@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akira Flow — AI Multi-Agent Video Factory</title>
+  <meta name="description" content="Autonomous AI multi-agent video factory platform. Create cinematic stories, YouTube hooks, and high-retention reels instantly.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Unified Cyberpunk Header -->
+  <header>
+    <div class="logo-container">
+      <h1 class="logo">Akira Flow</h1>
+      <span class="tagline">Create. Automate. Dominate.</span>
+    </div>
+    <div class="server-status">
+      <div class="status-dot"></div>
+      <span>Pipeline Live</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- Screen A: HOME DASHBOARD (Default view) -->
+    <div id="home-screen" class="dashboard-grid">
+      <!-- Left Panel: Job Creator -->
+      <section class="glass-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            Video Generation Engine
+          </h2>
+        </div>
+
+        <form id="orchestration-form">
+          <!-- Topic/Idea text area -->
+          <div class="form-group">
+            <label for="topic-input">Autonomous Topic or Idea</label>
+            <div class="input-glow-wrapper">
+              <textarea id="topic-input" placeholder="E.g., A dramatic time dilation paradox inside a deep black hole event horizon... or choose a preset." required></textarea>
+            </div>
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+              <button type="button" class="btn-compact btn-outline" style="padding: 0.35rem 0.65rem; font-size: 0.75rem;" id="preset-scifi-btn">Preset: Sci-Fi</button>
+              <button type="button" class="btn-compact btn-outline" style="padding: 0.35rem 0.65rem; font-size: 0.75rem;" id="preset-reels-btn">Preset: Fact Reels</button>
+            </div>
+          </div>
+
+          <!-- Video Style & Sub-Genre -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="video-type">Video Style</label>
+              <div class="input-glow-wrapper">
+                <select id="video-type">
+                  <option value="story_anime">Story &amp; Anime</option>
+                  <option value="youtube_hook">YouTube (Hook &amp; CTA)</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group" id="sub-genre-form-group">
+              <label for="sub-genre-select">Writing Toolkit</label>
+              <div class="input-glow-wrapper">
+                <select id="sub-genre-select">
+                  <option value="viral-story-framework">Universal Story</option>
+                  <!-- Dynamically populated -->
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Target Duration & Language -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="duration-target">Target Duration</label>
+              <div class="input-glow-wrapper">
+                <select id="duration-target">
+                  <option value="1 min">1 Minute (~460 words)</option>
+                  <option value="3 min">3 Minutes (~1380 words)</option>
+                  <option value="5 min">5 Minutes (~2300 words)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="language-select">Output Language</label>
+              <div class="input-glow-wrapper">
+                <select id="language-select">
+                  <option value="english">English</option>
+                  <option value="hindi">Hindi / Hinglish (Roman)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Advanced AI models -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="model-script">Script Model</label>
+              <div class="input-glow-wrapper">
+                <select id="model-script">
+                  <option value="openai-fast">openai-fast (Reasoning)</option>
+                  <option value="deepseek">deepseek (Structural)</option>
+                  <option value="perplexity-fast">perplexity-fast (Search)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="model-image">Image Model</label>
+              <div class="input-glow-wrapper">
+                <select id="model-image">
+                  <option value="flux">flux (High Detail)</option>
+                  <option value="gptimage">gptimage (Fast SDXL)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+                    <div class="form-row">
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <h3 style="margin-bottom: 0.5rem; font-size: 1rem; color: var(--accent-violet);">Voice Tuning & Enhancement</h3>
+            </div>
+            <div class="form-group">
+              <label for="voice-select">REAL Voice Models (ElevenLabs, Edge-TTS, etc.)</label>
+              <div class="input-glow-wrapper">
+                <select id="voice-select">
+                  <option value="elevenlabs-rachel">ElevenLabs - Rachel (Premium)</option>
+                  <option value="elevenlabs-drew">ElevenLabs - Drew (Premium)</option>
+                  <option value="hi-IN-MadhurNeural" selected>EdgeTTS - Madhur (Hindi M)</option>
+                  <option value="hi-IN-SwaraNeural">EdgeTTS - Swara (Hindi F)</option>
+                  <option value="en-US-GuyNeural">EdgeTTS - Guy (English M)</option>
+                  <option value="en-US-JennyNeural">EdgeTTS - Jenny (English F)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Auto-Magic Enhance (Lexis/Adobe Style)</label>
+              <div class="switch-container">
+                <div>
+                  <span style="font-size: 0.8rem; font-weight: 500;">Studio Clarity Engine</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="voice-enhance-switch" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label>Manual Tuning (Pitch, Speed, Bass)</label>
+              <div class="input-glow-wrapper" style="display:flex; gap: 1rem; padding:1rem; flex-wrap: wrap;">
+                <div style="flex:1; display:flex; flex-direction:column; gap:0.5rem; font-size:0.8rem;">
+                  <span>Pitch</span> <input type="range" id="voice-pitch" min="-10" max="10" step="1" value="0">
+                </div>
+                <div style="flex:1; display:flex; flex-direction:column; gap:0.5rem; font-size:0.8rem;">
+                  <span>Speed</span> <input type="range" id="voice-speed" min="0.5" max="2" step="0.1" value="1.0">
+                </div>
+                <div style="flex:1; display:flex; flex-direction:column; gap:0.5rem; font-size:0.8rem;">
+                  <span>Bass Boost</span> <input type="range" id="voice-bass" min="-10" max="10" step="1" value="0">
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label for="tavily-key-input">Tavily API Key (Optional)</label>
+              <div class="input-glow-wrapper">
+                <input type="password" id="tavily-key-input" placeholder="tvly-xxxxxxxxxxxx">
+              </div>
+            </div>
+          </div>
+
+          <!-- Research Switch -->
+          <div class="form-group">
+            <label>Deep Web-Research</label>
+            <div class="switch-container">
+              <div>
+                <span style="font-size: 0.8rem; font-weight: 500;">Autonomous Gemini Research Agent</span>
+                <p style="font-size: 0.65rem; color: var(--text-muted);">Searches Google and compiles fact logs before scripting</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="research-switch" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn-compact" id="launch-pipeline-btn" style="margin-top: 0.5rem;">
+            <span>Launch Autonomous Pipeline</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </button>
+        </form>
+      </section>
+
+      <!-- Right Panel: Recent Projects (Cloud Persistent Jobs) -->
+      <section class="glass-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            Recent Cloud Projects
+          </h2>
+          <span style="font-size: 0.75rem; color: var(--text-muted);" id="jobs-count">0 Projects</span>
+        </div>
+
+        <div class="jobs-list" id="cloud-jobs-container">
+          <!-- Populated by JS polling -->
+          <div style="color: var(--text-muted); text-align: center; padding: 3rem;">
+            No jobs found. Launch one above!
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Screen B: ACTIVE PIPELINE / WORKSPACE WORKBENCH -->
+    <div id="workspace-screen" class="active-workspace-panel">
+      <!-- Compact Horizontal Step Tracker -->
+      <div class="steps-timeline-container">
+        <div class="step-node" id="node-script">
+          <div class="step-circle">1</div>
+          <span>Script Agent</span>
+        </div>
+        <div class="step-line" id="line-1"></div>
+        
+        <div class="step-node" id="node-voice">
+          <div class="step-circle">2</div>
+          <span>Voice Agent</span>
+        </div>
+        <div class="step-line" id="line-2"></div>
+        
+        <div class="step-node" id="node-image">
+          <div class="step-circle">3</div>
+          <span>Image Agent</span>
+        </div>
+        <div class="step-line" id="line-3"></div>
+        
+        <div class="step-node" id="node-video">
+          <div class="step-circle">4</div>
+          <span>Composer</span>
+        </div>
+        <div class="step-line" id="line-4"></div>
+        
+        <div class="step-node" id="node-review">
+          <div class="step-circle">5</div>
+          <span>Review QA</span>
+        </div>
+      </div>
+
+      <!-- Main Workbench columns -->
+      <div class="workspace-columns">
+        
+        <!-- Left: Workbench details & segment scroller -->
+        <div class="controls-pane">
+          <!-- Active Status Bar -->
+          <div class="live-status-bar">
+            <div>
+              <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Active Agent</span>
+              <h3 id="active-agent-label" style="font-family: var(--font-title); color: var(--accent-cyan); font-size: 1.1rem; margin-top: 0.15rem;">Script Agent</h3>
+            </div>
+            
+            <div style="text-align: right;">
+              <span id="active-progress-percent" style="font-family: var(--font-title); color: #fff; font-size: 1.1rem;">0%</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Progress</span>
+            </div>
+            
+            <div class="progress-track">
+              <div class="progress-fill" id="workspace-progress-fill"></div>
+            </div>
+          </div>
+
+          <!-- Pause/Resume Alert Container -->
+          <div id="credit-pause-alert" class="notification" style="display: none; background: rgba(255, 45, 120, 0.15); border-color: var(--accent-pink); flex-direction: column; align-items: flex-start; gap: 0.75rem; padding: 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <strong style="color: #fff;">Pipeline Paused (Pollinations Credit Expiry)</strong>
+            </div>
+            <p style="font-size: 0.8rem; color: #d1d1eb;">Pollinations free credit limit reached. The system has automatically saved your progress at this exact scene! Wait a few minutes for the credit reset, then click the button below to resume seamlessly!</p>
+            <button class="btn-compact" id="resume-job-btn" style="width: auto; padding: 0.5rem 1rem; font-size: 0.8rem;">Resume Pipeline 🔄</button>
+          </div>
+
+          <!-- Dynamic Scenes Segment list -->
+          <div class="glass-panel" style="flex-grow: 1;">
+            <div class="panel-header">
+              <h2 class="panel-title">Storyboard &amp; Scenes</h2>
+              <button class="btn-compact btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.7rem; width: auto;" id="back-home-btn">← Exit Workspace</button>
+            </div>
+            
+            <div class="mini-scroller-scenes" id="workspace-scenes-container">
+              <!-- Populated dynamically -->
+              <div style="color: var(--text-muted); text-align: center; padding: 4rem;">
+                No script scenes loaded yet. Please wait for the script agent...
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Master Media Frame & Thumbnail panel -->
+        <div class="master-media-container">
+          <!-- Master H.264 MP4 Streaming player -->
+          <div class="glass-panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Master Output Player</h2>
+              <span id="review-score-badge" style="display: none; background: rgba(0,212,255,0.15); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); font-family: var(--font-title); font-size: 0.65rem; padding: 0.15rem 0.4rem; border-radius: 4px;">QA: 100%</span>
+            </div>
+            
+            <div class="master-video-frame">
+              <div class="loading-overlay" id="video-rendering-overlay" style="display: flex;">
+                <div class="spinner"></div>
+                <div class="loading-text" id="video-player-status">Waiting for Video Composer...</div>
+              </div>
+              <video id="master-video-player" class="master-video" controls>
+                <!-- Dynamically set -->
+              </video>
+            </div>
+
+            <!-- Export Buttons -->
+            <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+              <a href="#" id="export-download-btn" class="btn-compact disabled-item" style="flex: 1;" download>Download Master MP4</a>
+              <button class="btn-compact btn-outline disabled-item" style="flex: 1; position: relative;">
+                Direct YouTube Upload
+                <span class="coming-soon-badge">COMING SOON</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- YouTube Thumbnail generator -->
+          <div class="glass-panel">
+            <div class="panel-header">
+              <h2 class="panel-title">YouTube Thumbnail Generator</h2>
+              <button class="btn-compact btn-outline disabled-item" style="padding: 0.25rem 0.5rem; font-size: 0.7rem; width: auto;" id="generate-thumbnails-btn">Generate Templates</button>
+            </div>
+            
+            <div class="thumbnails-grid" id="thumbnails-container">
+              <!-- Rendered dynamically -->
+              <div style="grid-column: 1 / span 3; color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 1.5rem; border: 1px dashed var(--border-color); border-radius: 8px;">
+                Master video review must be completed to unlock thumbnails.
+              </div>
+            </div>
+          </div>
+
+          <!-- Settings overrides / coming soon features -->
+          <div class="glass-panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Workbench Settings</h2>
+            </div>
+            <div class="form-row">
+              <div class="disabled-badge-wrapper" style="opacity: 0.5; cursor: not-allowed;">
+                <label style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">HyperFrame Remaster</label>
+                <div class="input-glow-wrapper">
+                  <select disabled><option>Standard H.264</option></select>
+                </div>
+                <span class="coming-soon-badge">COMING SOON</span>
+              </div>
+
+              <div class="disabled-badge-wrapper" style="opacity: 0.5; cursor: not-allowed;">
+                <label style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Voice Cloning</label>
+                <div class="input-glow-wrapper">
+                  <select disabled><option>Synthesized Edge</option></select>
+                </div>
+                <span class="coming-soon-badge">COMING SOON</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom Log Panel (Simulated server outputs) -->
+    <section class="console-panel">
+      <div class="console-header">
+        <span>🤖 Server Log Monitor</span>
+        <span id="log-timestamp">00:00:00</span>
+      </div>
+      <div class="console-log" id="console-logs-container">
+        <div class="console-line">Initializing Akira Flow central cloud orchestrator...</div>
+        <div class="console-line">Ready to receive autonomous mult-agent pipelines.</div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
