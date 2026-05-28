@@ -54,3 +54,16 @@ The entire microservice ecosystem is managed via **PM2**.
     -   To restart the platform after an update: `pm2 restart all`
 
 Access the main dashboard on `http://localhost:3008`.
+
+---
+
+## 🌺 Powered by Pollinations.ai (Flower Tier Aspirant)
+
+The core generative magic behind **Akira Flow** is fundamentally driven by the incredible infrastructure of **[Pollinations.ai](https://pollinations.ai/)**. 
+
+By utilizing Pollinations' seamless, fast, and highly reliable endpoints, Akira Flow is capable of executing complex generative tasks simultaneously without infrastructure bottlenecks. Specifically, we heavily rely on Pollinations for:
+*   **State-of-the-Art Image Synthesis**: Feeding our Image Agent with rapid, high-fidelity Flux generation capabilities.
+*   **Dynamic Video Generation**: Empowering our Video Composer Agent with cutting-edge cinematic AI sequences.
+*   **Diverse TTS & Audio Generation**: Routing our Voice Agent through Pollinations for diverse, realistic, and premium text-to-speech models.
+
+We are deeply grateful for the open, accessible, and powerful API ecosystem that Pollinations has created. **Akira Flow is proud to be a heavy integrator of Pollinations.ai and aspires to secure the coveted "Flower Tier" approval to scale our multi-agent pipelines to the absolute maximum.**
