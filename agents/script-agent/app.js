@@ -7,23 +7,33 @@ const axios = require('axios');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Pollinations.ai Configuration
+// Pollinations.ai Configuration (STRICT PAID MODE)
 const POLLINATIONS_BASE_URL = 'https://gen.pollinations.ai';
-const POLLINATIONS_API_KEY = process.env.POLLINATIONS_API_KEY || 'sk_WAF0YaqgB5NZ6IDI3VVnraG8YHirl2QY'; 
+const POLLINATIONS_API_KEY = process.env.POLLINATIONS_API_KEY || 'sk_WAF0YaqgB5NZ6IDI3VVnraG8YHirl2QY';
 
-// Robust Fetch Helper for Pollinations.ai with Smart Fallback
+// Tavily Search Configuration
+const TAVILY_API_KEY = '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';
+
+// Robust Fetch Helper for Pollinations.ai
 async function callPollinationsText(model, messages, jsonMode = false) {
     try {
         const payload = {
-            model: model || 'openai',
+            model: model || 'openai-fast',
             messages: messages,
             seed: Math.floor(Math.random() * 1000000)
         };
 
         if (jsonMode) {
             payload.response_format = { type: 'json_object' };
+            // Ensure "json" is in the system prompt for models that require it
+            if (messages[0] && messages[0].role === 'system') {
+                if (!messages[0].content.toLowerCase().includes('json')) {
+                    messages[0].content += " You MUST respond in a valid JSON format.";
+                }
+            }
         }
 
+        console.log(`[API CALL] Model: ${payload.model} | JSON: ${jsonMode}`);
         const response = await axios.post(`${POLLINATIONS_BASE_URL}/v1/chat/completions`, payload, {
             headers: {
                 'Authorization': `Bearer ${POLLINATIONS_API_KEY}`,
@@ -37,35 +47,9 @@ async function callPollinationsText(model, messages, jsonMode = false) {
         }
         throw new Error("Invalid response from Pollinations API");
     } catch (error) {
-        // Handle Insufficient Balance (402) - Fallback to free models
-        if (error.response && error.response.status === 402) {
-            console.warn("Insufficient Balance (402). Attempting fallback to free modality...");
-            try {
-                const fallbackPayload = {
-                    model: 'openai-fast', // Use a model known to have a free modality
-                    messages: messages,
-                    seed: Math.floor(Math.random() * 1000000)
-                };
-                if (jsonMode) fallbackPayload.response_format = { type: 'json_object' };
-
-                // Retry WITHOUT the secret key to hit free limits if applicable, 
-                // or just use a generic model that might be available
-                const fallbackRes = await axios.post(`${POLLINATIONS_BASE_URL}/v1/chat/completions`, fallbackPayload, {
-                    headers: { 'Content-Type': 'application/json' },
-                    timeout: 120000
-                });
-
-                if (fallbackRes.data && fallbackRes.data.choices && fallbackRes.data.choices[0]) {
-                    console.log("Fallback successful!");
-                    return fallbackRes.data.choices[0].message.content;
-                }
-            } catch (fallbackErr) {
-                console.error("Fallback also failed:", fallbackErr.message);
-            }
-        }
-        
-        console.error("Pollinations API Error:", error.response ? error.response.data : error.message);
-        throw new Error(error.response ? JSON.stringify(error.response.data) : error.message);
+        const errorData = error.response ? error.response.data : error.message;
+        console.error("Pollinations API Error:", JSON.stringify(errorData));
+        throw new Error(JSON.stringify(errorData));
     }
 }
 
@@ -106,7 +90,7 @@ function cleanAndParseJSON(str) {
             const repaired = cleaned.replace(/\n/g, '\\n').replace(/\r/g, '\\r');
             return JSON.parse(repaired);
         } catch (innerError) {
-            throw new Error("Could not parse AI response as JSON.");
+            throw new Error("Could not parse AI response as JSON. Content: " + str.substring(0, 100));
         }
     }
 }
@@ -116,23 +100,22 @@ app.get('/api/models', async (req, res) => {
     try {
         const response = await axios.get(`${POLLINATIONS_BASE_URL}/v1/models`);
         const models = response.data.data || [];
-        // Filter text models
         const textModels = models.map(m => ({
             name: m.id,
-            description: `Pollinations model: ${m.id}`
+            description: `Paid Model: ${m.id}`
         }));
         res.json(textModels);
     } catch (error) {
         console.error('Error fetching models:', error);
         res.json([
-            { name: 'openai', description: 'Standard powerful model' },
-            { name: 'openai-fast', description: 'Fast responses' },
-            { name: 'gemini', description: 'Deep reasoning' }
+            { name: 'openai-fast', description: 'Paid Reasoning Model' },
+            { name: 'gemini', description: 'Deep Research' },
+            { name: 'mistral-large', description: 'Multi-lingual Expert' }
         ]);
     }
 });
 
-// POST /api/generate-script - Core Logic
+// POST /api/generate-script - Core Logic (STRICT PAID ONLY)
 app.post('/api/generate-script', async (req, res) => {
     const {
         topic,
@@ -149,35 +132,59 @@ app.post('/api/generate-script', async (req, res) => {
     try {
         let researchReport = '';
         if (enable_research) {
-            console.log('AGENT 1: Launching Research...');
-            const researchInstruction = `You are the Akira Flow Research Agent. Gather shocking facts and high-retention details on: "${topic}". Output a markdown report.`;
-            researchReport = await callPollinationsText('gemini-search', [
-                { role: 'system', content: researchInstruction },
-                { role: 'user', content: `Research topic: ${topic}` }
-            ]);
+            console.log('AGENT 1: Launching Tavily Web Research...');
+            try {
+                const tavilyRes = await axios.post('https://api.tavily.com/search', {
+                    api_key: TAVILY_API_KEY,
+                    query: topic,
+                    search_depth: 'advanced',
+                    include_answer: true
+                });
+                if (tavilyRes.data) {
+                    const data = tavilyRes.data;
+                    const summary = data.answer || 'No summary answer available.';
+                    researchReport = `## Tavily Deep Web Search Report: "${topic}"\n\n${summary}\n`;
+                    console.log('AGENT 1: Tavily research success!');
+                }
+            } catch (tavilyErr) {
+                console.warn("Tavily failed, using Gemini-Search fallback...");
+                const researchInstruction = `You are the Akira Flow Research Agent. Gather facts on: "${topic}". Output markdown.`;
+                researchReport = await callPollinationsText('gemini-search', [
+                    { role: 'system', content: researchInstruction },
+                    { role: 'user', content: `Research topic: ${topic}` }
+                ]);
+            }
         }
 
         const skillPrompt = getSkillPrompt(video_type, sub_genre);
-        console.log('AGENT 2: Writing Script...');
+        console.log(`AGENT 2: Writing Script using ${model}...`);
 
         let targetSeconds = 60;
         if (duration_target.includes('3')) targetSeconds = 180;
         const estimatedWords = Math.round(targetSeconds / 0.13);
 
-        const systemInstruction = `You are the Akira Flow Script Writer Agent. Respond with a RAW VALID JSON object only.
-Skills:
+        const systemInstruction = `You are the Akira Flow Script Writer Agent. You MUST respond in a valid JSON format.
+SKILLS & FRAMEWORKS:
 ${skillPrompt}
-Research:
+RESEARCH DATA:
 ${researchReport}
 
-Rules:
-1. Type: ${video_type}. Lang: ${language} (if hindi, use Roman Hinglish).
-2. Duration: ${targetSeconds}s (~${estimatedWords} words).
-3. JSON Schema: { "script_text": "...", "scenes": [{ "id": 1, "text": "...", "character": "...", "start_sec": 0, "end_sec": 5 }] }`;
+CONSTRAINTS:
+1. Type: ${video_type}. Language: ${language} (if hindi, use Roman Hinglish).
+2. Target Duration: ${targetSeconds}s (~${estimatedWords} words).
+3. Output strictly RAW VALID JSON matching this schema:
+{
+  "script_text": "Full script narration...",
+  "scenes": [
+    { "id": 1, "text": "Scene dialogue...", "character": "NARRATOR/CHAR_NAME", "start_sec": 0, "end_sec": 8 }
+  ],
+  "estimated_duration": ${targetSeconds},
+  "research_summary": "Short summary of research used"
+}`;
 
         const scriptContent = await callPollinationsText(model, [
             { role: 'system', content: systemInstruction },
-            { role: 'user', content: `Write script about: ${topic}` }
+            { role: 'user', content: `Write a high-retention script about: ${topic}` }
         ], true);
 
         const scriptJSON = cleanAndParseJSON(scriptContent);
