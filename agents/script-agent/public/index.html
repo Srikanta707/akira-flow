@@ -190,6 +190,10 @@
 
         <div class="result-panel" id="result-panel">
             <h3 style="margin-top: 0; font-weight: 400;">Pipeline Output</h3>
+            <div id="stats-panel" style="display: flex; gap: 20px; margin-bottom: 15px; font-size: 0.85rem; opacity: 0.9; color: var(--accent);">
+                <span id="stat-duration"></span>
+                <span id="stat-words"></span>
+            </div>
             <pre id="output"></pre>
         </div>
     </div>
@@ -215,6 +219,14 @@
                 });
 
                 const data = await response.json();
+                
+                // Display stats
+                if (data.estimated_duration) {
+                    document.getElementById('stat-duration').textContent = `⏱ Estimated Duration: ${data.estimated_duration}s`;
+                }
+                const wordCount = data.script_text ? data.script_text.split(/\s+/).length : 0;
+                document.getElementById('stat-words').textContent = `📝 Word Count: ${wordCount}`;
+
                 document.getElementById('output').textContent = JSON.stringify(data, null, 2);
                 document.getElementById('result-panel').style.display = 'block';
             } catch (error) {

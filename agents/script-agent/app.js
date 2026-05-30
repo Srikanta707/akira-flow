@@ -157,7 +157,13 @@ app.post('/api/generate-script', async (req, res) => {
         }
 
         const skillPrompt = getSkillPrompt(video_type, sub_genre);
-        console.log(`AGENT 2: Writing Script using ${model}...`);
+        
+        // Map UI model choices to strict Paid IDs
+        let activeModel = model;
+        if (model === 'gemini') activeModel = 'gemini-large';
+        if (model === 'openai-fast') activeModel = 'openai-fast'; // This is already paid if using sk_ key
+
+        console.log(`AGENT 2: Writing Script using ${activeModel}...`);
 
         let targetSeconds = 60;
         if (duration_target.includes('3')) targetSeconds = 180;
@@ -179,15 +185,22 @@ CONSTRAINTS:
     { "id": 1, "text": "Scene dialogue...", "character": "NARRATOR/CHAR_NAME", "start_sec": 0, "end_sec": 8 }
   ],
   "estimated_duration": ${targetSeconds},
+  "word_count": ${estimatedWords},
   "research_summary": "Short summary of research used"
 }`;
 
-        const scriptContent = await callPollinationsText(model, [
+        const scriptContent = await callPollinationsText(activeModel, [
             { role: 'system', content: systemInstruction },
             { role: 'user', content: `Write a high-retention script about: ${topic}` }
         ], true);
 
         const scriptJSON = cleanAndParseJSON(scriptContent);
+        
+        // Add actual word count for the UI
+        if (scriptJSON.script_text) {
+            scriptJSON.word_count = scriptJSON.script_text.split(/\s+/).length;
+        }
+
         if (enable_research) scriptJSON.research_report = researchReport;
 
         res.json(scriptJSON);
