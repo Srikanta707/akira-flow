@@ -95,23 +95,25 @@ function cleanAndParseJSON(str) {
     }
 }
 
-// GET /api/models - Dynamic model listing from Pollinations
+// GET /api/models - Dynamic model listing with detailed metadata
 app.get('/api/models', async (req, res) => {
     try {
-        const response = await axios.get(`${POLLINATIONS_BASE_URL}/v1/models`);
-        const models = response.data.data || [];
-        const textModels = models.map(m => ({
-            name: m.id,
-            description: `Paid Model: ${m.id}`
+        const response = await axios.get(`${POLLINATIONS_BASE_URL}/text/models`);
+        const models = response.data || [];
+        
+        const filteredModels = models.map(m => ({
+            id: m.name,
+            name: m.description || m.name,
+            isPaid: m.paid_only || false,
+            context: m.context_length || '128k',
+            reasoning: m.reasoning || false,
+            modalities: m.input_modalities || ['text']
         }));
-        res.json(textModels);
+        
+        res.json(filteredModels);
     } catch (error) {
         console.error('Error fetching models:', error);
-        res.json([
-            { name: 'openai-fast', description: 'Paid Reasoning Model' },
-            { name: 'gemini', description: 'Deep Research' },
-            { name: 'mistral-large', description: 'Multi-lingual Expert' }
-        ]);
+        res.status(500).json({ error: 'Failed to fetch dynamic models' });
     }
 });
 

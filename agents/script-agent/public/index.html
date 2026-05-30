@@ -7,9 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --glass: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
             --accent: #007AFF;
+            --premium: #FFD700;
         }
 
         body {
@@ -29,83 +30,150 @@
             width: 90%;
             max-width: 800px;
             background: var(--glass);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(30px) saturate(180%);
             border: 1px solid var(--glass-border);
-            border-radius: 30px;
+            border-radius: 40px;
             padding: 40px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-            animation: fadeIn 1s ease-out;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         h1 {
             font-weight: 300;
             letter-spacing: 2px;
             text-align: center;
-            margin-bottom: 30px;
-            background: linear-gradient(to right, #fff, #aaa);
+            margin-bottom: 35px;
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #fff 0%, #aaa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            opacity: 0.8;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.6;
         }
 
-        input, select, textarea {
+        input, .custom-select {
             width: 100%;
-            padding: 12px 15px;
+            padding: 16px 20px;
             background: rgba(255,255,255,0.05);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
+            border-radius: 18px;
             color: white;
             font-family: inherit;
             box-sizing: border-box;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
         }
 
-        input:focus, select:focus {
-            border-color: var(--accent);
+        input:focus {
             outline: none;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.12);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15);
+        }
+
+        /* Custom Modal / Popup Styles */
+        #model-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(25, 25, 25, 0.9);
+            width: 90%;
+            max-width: 600px;
+            border-radius: 35px;
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+        }
+
+        .model-item {
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .model-item:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: var(--glass-border);
+            transform: scale(1.01);
+        }
+
+        .model-item.selected {
+            border-color: var(--accent);
+            background: rgba(0, 122, 255, 0.05);
+        }
+
+        .tag-paid {
+            background: var(--premium);
+            color: black;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
         }
 
         .btn-launch {
             width: 100%;
-            padding: 15px;
-            background: var(--accent);
+            padding: 20px;
+            background: linear-gradient(135deg, #007AFF, #0056B3);
             border: none;
-            border-radius: 15px;
+            border-radius: 22px;
             color: white;
             font-weight: 600;
+            font-size: 1.1rem;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 20px;
-            box-shadow: 0 10px 20px rgba(0,122,255,0.3);
+            transition: all 0.4s;
+            margin-top: 10px;
+            box-shadow: 0 15px 35px rgba(0,122,255,0.25);
         }
 
         .btn-launch:hover {
-            transform: scale(1.02);
-            box-shadow: 0 15px 30px rgba(0,122,255,0.4);
+            transform: scale(1.02) translateY(-2px);
+            box-shadow: 0 20px 45px rgba(0,122,255,0.4);
         }
 
         .result-panel {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 20px;
-            max-height: 400px;
+            margin-top: 40px;
+            padding: 25px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 25px;
+            max-height: 500px;
             overflow-y: auto;
             display: none;
             border: 1px solid var(--glass-border);
@@ -114,83 +182,71 @@
         pre {
             white-space: pre-wrap;
             word-wrap: break-word;
-            font-size: 0.85rem;
-            color: #4cd964;
+            font-size: 0.9rem;
+            color: #A8FFB2;
+            line-height: 1.6;
         }
 
         .loader {
             display: none;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
         .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255,255,255,0.1);
-            border-top: 4px solid var(--accent);
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.05);
+            border-top: 5px solid var(--accent);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             margin: 0 auto;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
     <div class="vision-container">
-        <h1>Akira Flow <span style="font-weight: 600;">Script Agent</span></h1>
+        <h1>Akira <span style="font-weight: 600;">Flow</span></h1>
         
         <div class="form-group">
-            <label>Topic / Prompt</label>
-            <input type="text" id="topic" placeholder="e.g. The secret history of Mars exploration">
+            <label>Topic Architecture</label>
+            <input type="text" id="topic" placeholder="Describe your vision...">
         </div>
 
         <div style="display: flex; gap: 20px;">
             <div class="form-group" style="flex: 1;">
-                <label>Video Type</label>
-                <select id="video_type">
+                <label>Vibe & Style</label>
+                <select id="video_type" class="custom-select" style="appearance: none;">
                     <option value="youtube_hook">YouTube Hook</option>
                     <option value="story_anime">Anime Story</option>
                 </select>
             </div>
             <div class="form-group" style="flex: 1;">
-                <label>Language</label>
-                <select id="language">
-                    <option value="english">English</option>
-                    <option value="hindi">Hindi (Hinglish)</option>
-                </select>
+                <label>Intelligence Model</label>
+                <div id="selected-model-display" class="custom-select" onclick="openModelModal()">
+                    Loading models...
+                </div>
             </div>
         </div>
 
         <div class="form-group">
-            <label>Model</label>
-            <select id="model">
-                <option value="openai-fast">OpenAI Fast (Recommended)</option>
-                <option value="gemini">Gemini Reasoning</option>
-                <option value="mistral">Mistral Multi-lingual</option>
-            </select>
-        </div>
-
-        <div class="form-group">
             <label style="display: flex; align-items: center; cursor: pointer;">
-                <input type="checkbox" id="research" style="width: auto; margin-right: 10px;"> Enable Autonomous Research
+                <input type="checkbox" id="research" style="width: auto; margin-right: 12px; transform: scale(1.3);"> 
+                Enable Autonomous Research (Tavily Engine)
             </label>
         </div>
 
-        <button class="btn-launch" onclick="generate()">GENERATE SCRIPT</button>
+        <button class="btn-launch" onclick="generate()">SYNC & GENERATE</button>
 
         <div class="loader" id="loader">
             <div class="spinner"></div>
-            <p style="margin-top: 10px; opacity: 0.7;">Orchestrating AI Pipeline...</p>
+            <p style="margin-top: 15px; opacity: 0.7; letter-spacing: 1px;">ORCHESTRATING PIPELINE</p>
         </div>
 
         <div class="result-panel" id="result-panel">
-            <h3 style="margin-top: 0; font-weight: 400;">Pipeline Output</h3>
-            <div id="stats-panel" style="display: flex; gap: 20px; margin-bottom: 15px; font-size: 0.85rem; opacity: 0.9; color: var(--accent);">
+            <div id="stats-panel" style="display: flex; gap: 20px; margin-bottom: 20px; font-size: 0.9rem; color: var(--accent);">
                 <span id="stat-duration"></span>
                 <span id="stat-words"></span>
             </div>
@@ -198,15 +254,65 @@
         </div>
     </div>
 
+    <!-- Model Selection Modal -->
+    <div id="model-modal" onclick="closeModelModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2 style="font-weight: 300; margin-bottom: 25px;">Select Intelligence</h2>
+            <div id="model-list"></div>
+        </div>
+    </div>
+
     <script>
+        let allModels = [];
+        let selectedModelId = 'openai-fast';
+
+        async function fetchModels() {
+            try {
+                const res = await fetch('/api/models');
+                allModels = await res.json();
+                renderModels();
+                updateModelDisplay();
+            } catch (e) {
+                document.getElementById('selected-model-display').textContent = 'Error loading models';
+            }
+        }
+
+        function updateModelDisplay() {
+            const model = allModels.find(m => m.id === selectedModelId);
+            const display = document.getElementById('selected-model-display');
+            if (model) {
+                display.innerHTML = `${model.id} ${model.isPaid ? '<span class="tag-paid">Paid</span>' : ''}`;
+            }
+        }
+
+        function renderModels() {
+            const list = document.getElementById('model-list');
+            list.innerHTML = allModels.map(m => `
+                <div class="model-item ${m.id === selectedModelId ? 'selected' : ''}" onclick="selectModel('${m.id}')">
+                    <div>
+                        <div style="font-weight: 600;">${m.id}</div>
+                        <div style="font-size: 0.75rem; opacity: 0.5;">${m.name}</div>
+                    </div>
+                    ${m.isPaid ? '<span class="tag-paid">Paid</span>' : '<span style="font-size: 10px; opacity: 0.5;">FREE</span>'}
+                </div>
+            `).join('');
+        }
+
+        function selectModel(id) {
+            selectedModelId = id;
+            updateModelDisplay();
+            closeModelModal();
+        }
+
+        function openModelModal() { document.getElementById('model-modal').style.display = 'flex'; }
+        function closeModelModal(e) { document.getElementById('model-modal').style.display = 'none'; }
+
         async function generate() {
             const topic = document.getElementById('topic').value;
             const video_type = document.getElementById('video_type').value;
-            const language = document.getElementById('language').value;
-            const model = document.getElementById('model').value;
             const enable_research = document.getElementById('research').checked;
 
-            if (!topic) return alert('Please enter a topic!');
+            if (!topic) return alert('Insight required!');
 
             document.getElementById('loader').style.display = 'block';
             document.getElementById('result-panel').style.display = 'none';
@@ -215,26 +321,32 @@
                 const response = await fetch('/api/generate-script', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ topic, video_type, language, model, enable_research })
+                    body: JSON.stringify({ 
+                        topic, 
+                        video_type, 
+                        model: selectedModelId, 
+                        enable_research 
+                    })
                 });
 
                 const data = await response.json();
-                
-                // Display stats
+                if (data.error) throw new Error(data.error);
+
                 if (data.estimated_duration) {
-                    document.getElementById('stat-duration').textContent = `⏱ Estimated Duration: ${data.estimated_duration}s`;
+                    document.getElementById('stat-duration').textContent = `⏱ ${data.estimated_duration}s`;
                 }
-                const wordCount = data.script_text ? data.script_text.split(/\s+/).length : 0;
-                document.getElementById('stat-words').textContent = `📝 Word Count: ${wordCount}`;
+                document.getElementById('stat-words').textContent = `📝 ${data.word_count || 0} words`;
 
                 document.getElementById('output').textContent = JSON.stringify(data, null, 2);
                 document.getElementById('result-panel').style.display = 'block';
             } catch (error) {
-                alert('Error: ' + error.message);
+                alert('Engine Failure: ' + error.message);
             } finally {
                 document.getElementById('loader').style.display = 'none';
             }
         }
+
+        fetchModels();
     </script>
 </body>
 </html>
