@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3001;
 
 // Pollinations.ai Configuration
 const POLLINATIONS_BASE_URL = 'https://gen.pollinations.ai';
-const POLLINATIONS_API_KEY = process.env.POLLINATIONS_API_KEY || 'sk_89634e2c-396a-497c-9ef1-42e131d87f7b'; // Default fallback or use env
+const POLLINATIONS_API_KEY = process.env.POLLINATIONS_API_KEY || 'sk_WAF0YaqgB5NZ6IDI3VVnraG8YHirl2QY'; 
 
 // Robust Fetch Helper for Pollinations.ai
 async function callPollinationsText(model, messages, jsonMode = false) {
