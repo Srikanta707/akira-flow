@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3001;
 const POLLINATIONS_BASE_URL = 'https://gen.pollinations.ai';
 const POLLINATIONS_API_KEY = process.env.POLLINATIONS_API_KEY || 'sk_WAF0YaqgB5NZ6IDI3VVnraG8YHirl2QY'; 
 
-// Robust Fetch Helper for Pollinations.ai
+// Robust Fetch Helper for Pollinations.ai with Smart Fallback
 async function callPollinationsText(model, messages, jsonMode = false) {
     try {
         const payload = {
@@ -37,6 +37,33 @@ async function callPollinationsText(model, messages, jsonMode = false) {
         }
         throw new Error("Invalid response from Pollinations API");
     } catch (error) {
+        // Handle Insufficient Balance (402) - Fallback to free models
+        if (error.response && error.response.status === 402) {
+            console.warn("Insufficient Balance (402). Attempting fallback to free modality...");
+            try {
+                const fallbackPayload = {
+                    model: 'openai-fast', // Use a model known to have a free modality
+                    messages: messages,
+                    seed: Math.floor(Math.random() * 1000000)
+                };
+                if (jsonMode) fallbackPayload.response_format = { type: 'json_object' };
+
+                // Retry WITHOUT the secret key to hit free limits if applicable, 
+                // or just use a generic model that might be available
+                const fallbackRes = await axios.post(`${POLLINATIONS_BASE_URL}/v1/chat/completions`, fallbackPayload, {
+                    headers: { 'Content-Type': 'application/json' },
+                    timeout: 120000
+                });
+
+                if (fallbackRes.data && fallbackRes.data.choices && fallbackRes.data.choices[0]) {
+                    console.log("Fallback successful!");
+                    return fallbackRes.data.choices[0].message.content;
+                }
+            } catch (fallbackErr) {
+                console.error("Fallback also failed:", fallbackErr.message);
+            }
+        }
+        
         console.error("Pollinations API Error:", error.response ? error.response.data : error.message);
         throw new Error(error.response ? JSON.stringify(error.response.data) : error.message);
     }
