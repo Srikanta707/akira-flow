@@ -165,15 +165,14 @@ app.post('/api/generate-images', async (req, res) => {
     const charactersArray = Array.from(uniqueCharacters);
     console.log(`Generating character reference sheets for: ${charactersArray.join(', ')}`);
 
-    for (const char of charactersArray) {
+    // Parallelize character reference sheet generation
+    await Promise.all(charactersArray.map(async (char) => {
       const refFilename = `ref_${jobId}_${char}.jpg`;
       const refPath = path.join(tempDir, refFilename);
 
-      // Construct a highly detailed prompt to establish consistency
       const stylePrefix = video_type === 'story_anime' ? 'anime style, vibrant coloring, cinematic lighting, detailed, ' : 'cinematic style, realistic lighting, detailed, ';
       const promptText = `${stylePrefix}character model sheet showing front face close up of ${char}, consistent design, detailed hair and eyes, high resolution, 4k`;
 
-      // Call the proxy image endpoint directly on base domain (without /v1)
       const url = `https://ciel.sryze.cc/image/${encodeURIComponent(promptText)}?model=${encodeURIComponent(model)}`;
       
       console.log(`Calling Proxy Image Gen for Character Sheet: ${char}`);
@@ -183,40 +182,18 @@ app.post('/api/generate-images', async (req, res) => {
         headers: {
           'Authorization': `Bearer ${PROXY_CLIENT_KEY}`
         },
-        responseType: 'arraybuffer'
+        responseType: 'arraybuffer',
+        timeout: 120000 // 2 min timeout
       });
 
       const buffer = Buffer.from(axiosRes.data);
-      
-      // Safety check: verify if response is a JSON error message (e.g. if compressed)
-      let isJson = false;
-      let decodedStr = '';
-      try {
-        const decomp = zlib.brotliDecompressSync(buffer);
-        decodedStr = decomp.toString('utf8');
-        isJson = decodedStr.trim().startsWith('{');
-      } catch (e) {
-        try {
-          const decomp = zlib.gunzipSync(buffer);
-          decodedStr = decomp.toString('utf8');
-          isJson = decodedStr.trim().startsWith('{');
-        } catch (e2) {
-          decodedStr = buffer.toString('utf8');
-          isJson = decodedStr.trim().startsWith('{');
-        }
-      }
-
-      if (isJson) {
-        const errObj = JSON.parse(decodedStr);
-        throw new Error(`Proxy image error: ${errObj.error ? errObj.error.message : decodedStr}`);
-      }
-
       fs.writeFileSync(refPath, buffer);
       characterSheets[char] = `/temp/${refFilename}`;
-    }
+    }));
 
-    // 2. Generate a visual scene for each script scene
-    for (const scene of scenes) {
+    // 2. Generate a visual scene for each script scene in parallel
+    console.log(`Launching parallel generation for ${scenes.length} scenes...`);
+    const scenePromises = scenes.map(async (scene) => {
       const sceneId = scene.id;
       const text = scene.text;
       const speaker = scene.character || 'NARRATOR';
@@ -224,18 +201,13 @@ app.post('/api/generate-images', async (req, res) => {
       const sceneFilename = `img_${jobId}_scene_${sceneId}.jpg`;
       const scenePath = path.join(tempDir, sceneFilename);
 
-      // Determine style rules based on video type
       const stylePrefix = video_type === 'story_anime' ? 'anime style key visual, vibrant coloring, highly detailed, cinematic lighting, ' : 'cinematic frame, 4k resolution, highly detailed, photorealistic lighting, ';
       
-      // We weave the speaking character and prompt text together
       let promptText = `${stylePrefix}${text}`;
-      
-      // If a non-narrator speaker is active, we add their reference description to lock consistency
       if (speaker !== 'NARRATOR' && characterSheets[speaker]) {
         promptText += `, featuring the character ${speaker} as shown in reference sheet`;
       }
 
-      // Call the proxy image endpoint directly on base domain (without /v1)
       const url = `https://ciel.sryze.cc/image/${encodeURIComponent(promptText)}?model=${encodeURIComponent(model)}`;
       console.log(`Generating Scene ${sceneId} Image Prompt: "${promptText.substring(0, 50)}..."`);
       
@@ -245,45 +217,25 @@ app.post('/api/generate-images', async (req, res) => {
         headers: {
           'Authorization': `Bearer ${PROXY_CLIENT_KEY}`
         },
-        responseType: 'arraybuffer'
+        responseType: 'arraybuffer',
+        timeout: 120000 // 2 min timeout
       });
 
       const buffer = Buffer.from(axiosRes.data);
-      
-      // Safety check
-      let isJson = false;
-      let decodedStr = '';
-      try {
-        const decomp = zlib.brotliDecompressSync(buffer);
-        decodedStr = decomp.toString('utf8');
-        isJson = decodedStr.trim().startsWith('{');
-      } catch (e) {
-        try {
-          const decomp = zlib.gunzipSync(buffer);
-          decodedStr = decomp.toString('utf8');
-          isJson = decodedStr.trim().startsWith('{');
-        } catch (e2) {
-          decodedStr = buffer.toString('utf8');
-          isJson = decodedStr.trim().startsWith('{');
-        }
-      }
-
-      if (isJson) {
-        const errObj = JSON.parse(decodedStr);
-        throw new Error(`Proxy image error: ${errObj.error ? errObj.error.message : decodedStr}`);
-      }
-
       fs.writeFileSync(scenePath, buffer);
 
-      generatedScenes.push({
+      return {
         scene_id: sceneId,
         image_url: `/temp/${sceneFilename}`,
         prompt_used: promptText
-      });
-    }
+      };
+    });
+
+    const results = await Promise.all(scenePromises);
+    generatedScenes.push(...results);
 
     res.json({
-      scenes: generatedScenes,
+      scenes: generatedScenes.sort((a, b) => a.scene_id - b.scene_id),
       character_sheets: characterSheets
     });
 

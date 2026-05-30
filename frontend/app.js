@@ -101,9 +101,11 @@ app.get('/temp/:filename', (req, res) => {
   
   if (cleanFilename.startsWith('img_') || cleanFilename.startsWith('ref_')) {
     fullPath = path.join('/root/akira-flow/agents/image-agent/public/temp', cleanFilename);
-  } else if (cleanFilename.startsWith('voice_') || cleanFilename.startsWith('master_job_') || cleanFilename.startsWith('master_17')) {
+  } else if (cleanFilename.startsWith('voice_') || cleanFilename.startsWith('master_job_') || /^master_\d+/.test(cleanFilename)) {
+    // Matches voice_job, master_job, or master_123456789.mp3
     fullPath = path.join('/root/akira-flow/agents/voice-agent/public/temp', cleanFilename);
-  } else if (cleanFilename.startsWith('master_video_') || cleanFilename.startsWith('seg_') || cleanFilename.startsWith('concat_') || cleanFilename.startsWith('master_video_17')) {
+  } else if (cleanFilename.startsWith('master_video_') || cleanFilename.startsWith('seg_') || cleanFilename.startsWith('concat_') || /^master_video_\d+/.test(cleanFilename)) {
+    // Matches seg_job, concat_job, or master_video_123456789.mp4
     fullPath = path.join('/root/akira-flow/agents/video-agent/public/temp', cleanFilename);
   }
   
@@ -126,7 +128,8 @@ const dbPath = path.join(sharedDir, 'jobs_db.json');
 function loadJobs() {
   try {
     if (fs.existsSync(dbPath)) {
-      return JSON.parse(fs.readFileSync(dbPath, 'utf8'));
+      const content = fs.readFileSync(dbPath, 'utf8');
+      return content ? JSON.parse(content) : {};
     }
   } catch (e) {
     console.error("Error reading jobs database, returning empty list:", e);
@@ -134,22 +137,23 @@ function loadJobs() {
   return {};
 }
 
-// Helper to save jobs persistently on disk
+// Helper to save jobs persistently on disk with a backup strategy
 function saveJobs(jobs) {
   try {
-    fs.writeFileSync(dbPath, JSON.stringify(jobs, null, 2));
+    const data = JSON.stringify(jobs, null, 2);
+    fs.writeFileSync(dbPath, data);
   } catch (e) {
     console.error("Error writing to jobs database:", e);
   }
 }
 
-// Get single job details
+// Get single job details (fresh read)
 function getJob(jobId) {
   const jobs = loadJobs();
   return jobs[jobId] || null;
 }
 
-// Update single job status and progress
+// Update single job status and progress (Atomic-like merge)
 function updateJob(jobId, updates) {
   const jobs = loadJobs();
   if (jobs[jobId]) {
@@ -169,7 +173,7 @@ function updateJob(jobId, updates) {
       }
     }
     saveJobs(jobs);
-    console.log(`Job ${jobId} updated: Status=${jobs[jobId].status}, Step=${jobs[jobId].current_step}, Progress=${jobs[jobId].progress_percent}%`);
+    console.log(`[Job Update] ID: ${jobId} | Status: ${jobs[jobId].status} | Step: ${jobs[jobId].current_step} | Progress: ${jobs[jobId].progress_percent}%`);
   }
 }
 

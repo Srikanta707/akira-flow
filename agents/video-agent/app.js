@@ -102,11 +102,12 @@ app.post('/api/compose-video', async (req, res) => {
       const getAudioDurationCmd = `ffprobe -i "${audioPath}" -show_entries format=duration -v quiet -of csv="p=0"`;
       const audioDurStr = await runCommand(getAudioDurationCmd);
       const exactAudioDuration = parseFloat(audioDurStr.trim());
-      console.log(`Audio exact duration: ${exactAudioDuration}ms`);
+      console.log(`Audio exact duration: ${exactAudioDuration} seconds`);
 
       // 3. Trim or loop the 5-second generated video to perfectly match the audio duration
       console.log(`Looping/trimming generated video to perfectly sync with audio duration (${exactAudioDuration}s)...`);
-      const syncCmd = `ffmpeg -y -loglevel error -stream_loop -1 -i "${genVideoPath}" -i "${audioPath}" -c:v libx264 -c:a aac -b:a 192k -shortest -t ${exactAudioDuration} "${segmentPath}"`;
+      // Force consistent resolution and framerate during sync to ensure safe concatenation
+      const syncCmd = `ffmpeg -y -loglevel error -stream_loop -1 -i "${genVideoPath}" -i "${audioPath}" -vf "scale=1920:1080,fps=25" -c:v libx264 -pix_fmt yuv420p -c:a aac -b:a 192k -shortest -t ${exactAudioDuration} "${segmentPath}"`;
       await runCommand(syncCmd);
 
       try { fs.unlinkSync(genVideoPath); } catch(e) {}

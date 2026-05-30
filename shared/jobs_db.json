@@ -1,6 +1,6 @@
 {
-  "job_1779972331673": {
-    "job_id": "job_1779972331673",
+  "job_1780148165370": {
+    "job_id": "job_1780148165370",
     "topic": "A cyberpunk detective discovers that his own neural memory chips are cloned from a criminal mastermind executed 10 years ago.",
     "video_type": "story_anime",
     "sub_genre": "viral-story-framework",
@@ -9,70 +9,15 @@
     "model_script": "openai-fast",
     "model_image": "flux",
     "enable_research": true,
-    "voice_profile": "qwen-tts",
+    "voice_profile": "hi-IN-MadhurNeural",
     "tavily_key": "",
     "status": "failed",
-    "current_step": "voice",
-    "progress_percent": 30,
+    "current_step": "script",
+    "progress_percent": 10,
     "error_message": "Request failed with status code 500",
-    "created_at": "2026-05-28T12:45:31.673Z",
+    "created_at": "2026-05-30T13:36:05.370Z",
     "data": {
-      "script": {
-        "script_text": "Main hoon Arjun, cyberpunk detective in neon rain. Aaj raat, shehar ki alleys mein memory chips ki khamoshi chhayi hai. Log kehte hain yaadein hamari hain, par kuch cheezein unke andar chhupi hoti hain jo hum samajh nahi paate. Mere chips ki glow ghar ki awaaz jaisi hai, par main jaanta hoon yeh sirf memory nahi. Is shehar ki galiyon me ek purana qarz bhara hai, jo ab bhi jag raha hai, mujh par. aur yaad bhi. Yeh twist hai, sensors. Meri memory logs me uss mastermind ki pulse chal rahi hai. Jo waqt ke sath mujhe mila, usme kuch lines aise hain jo dohrate hain. Ten saal ke pehle himmat tod kar qatl hue, par unki soch ab mere chips me jaisi chal rahi hai. Agar meri yaadein uske fingerprints ko chase rahi hain, to samajh lo main khud uski rehem me pad chuka hoon. Yeh city, yeh neon rain, kuch theek nahi. Dono yaadein milti hain, par asli kahani uss waqt se judi hai jo hamesha chup rehti hai. 10 saal pehle, us criminal mastermind ko qatal kiya gaya tha, par uski soch ki aawaz humare zinda rahegi. Chip ki memory block par uska signature tha, jaise kisi milaye huye helical code par likha ho. Aap samajh rahe hain? Meri aankhon ke samne, itni saari lines, itni gehri marzi, ki main khud is raaz ki zimmedari le raha hoon. Meri research ne meri zubaan chaba di. Uss mastermind ke archived speeches mere system me echo kar rahe hain, jaise chip me koi curse ho. Main puchta hoon, agar main uske code ki copy hoon, to meri moral compass kahan chala gaya? Mera badge brilliance, ya meri humanity? Shahar ki alloys ki ghanti baj rahi hai, aur main uss sound ke peeche chhupe asli shaks ko dhoond raha hoon, mere andar ki roshni jo sabko saamne rahe. Main ne bolna shuru kiya, par flashes meri aankhon me bandh ho rahe the. Mera brain-OS ke param kehti hai ki yeh sab system-level betrayal hai. Agar us mastermind ki yaadein meri memory chips me clone ho gayi hain, to mere doston ki guarantee bhi khatam ho sakti hai. To main action mode me aayi, console par haath phaila, ek face-slap moment sabko chaukha diya. Ab main sirf truth ke raaste par chalne ko ready hoon abhi. Ab meri raatein sirf memories ki raaz ke baare me hain. Agar yeh mastermind meri dimaag ki copy hai, to uski wajah mere future par nayi police knowledge ke roop me aayegi. Main is raaz ko public karne wala hoon, lekin pehle tum log se puchta hoon—kya tum samajh pa rahe hain ki memory ki asli mehnat kya hoti? Part 2 ka intezaar karo, kyunki sab kuch badal jayega! Tumhe is kahani ke aage jana, abhi saath.",
-        "characters": [
-          "NARRATOR",
-          "DETECTIVE"
-        ],
-        "estimated_duration_seconds": 60,
-        "language": "hindi",
-        "video_type": "story_anime",
-        "word_count": 462,
-        "research_report": "Failed to fetch live research due to API status (Research Agent returned an empty or unexpected payload structure.). Proceeding with standard script writing.",
-        "scenes": [
-          {
-            "id": 1,
-            "text": "Main hoon Arjun, cyberpunk detective in neon rain. Aaj raat, shehar ki alleys mein memory chips ki khamoshi chhayi hai. Log kehte hain yaadein hamari hain, par kuch cheezein unke andar chhupi hoti hain jo hum samajh nahi paate. Mere chips ki glow ghar ki awaaz jaisi hai, par main jaanta hoon yeh sirf memory nahi. Is shehar ki galiyon me ek purana qarz bhara hai, jo ab bhi jag raha hai, mujh par. aur yaad bhi.",
-            "character": "NARRATOR",
-            "start_sec": 0,
-            "end_sec": 10.01
-          },
-          {
-            "id": 2,
-            "text": "Yeh twist hai, sensors. Meri memory logs me uss mastermind ki pulse chal rahi hai. Jo waqt ke sath mujhe mila, usme kuch lines aise hain jo dohrate hain. Ten saal ke pehle himmat tod kar qatl hue, par unki soch ab mere chips me jaisi chal rahi hai. Agar meri yaadein uske fingerprints ko chase rahi hain, to samajh lo main khud uski rehem me pad chuka hoon. Yeh city, yeh neon rain, kuch theek nahi.",
-            "character": "DETECTIVE",
-            "start_sec": 10.01,
-            "end_sec": 20.02
-          },
-          {
-            "id": 3,
-            "text": "Dono yaadein milti hain, par asli kahani uss waqt se judi hai jo hamesha chup rehti hai. 10 saal pehle, us criminal mastermind ko qatal kiya gaya tha, par uski soch ki aawaz humare zinda rahegi. Chip ki memory block par uska signature tha, jaise kisi milaye huye helical code par likha ho. Aap samajh rahe hain? Meri aankhon ke samne, itni saari lines, itni gehri marzi, ki main khud is raaz ki zimmedari le raha hoon.",
-            "character": "NARRATOR",
-            "start_sec": 20.02,
-            "end_sec": 30.03
-          },
-          {
-            "id": 4,
-            "text": "Meri research ne meri zubaan chaba di. Uss mastermind ke archived speeches mere system me echo kar rahe hain, jaise chip me koi curse ho. Main puchta hoon, agar main uske code ki copy hoon, to meri moral compass kahan chala gaya? Mera badge brilliance, ya meri humanity? Shahar ki alloys ki ghanti baj rahi hai, aur main uss sound ke peeche chhupe asli shaks ko dhoond raha hoon, mere andar ki roshni jo sabko saamne rahe.",
-            "character": "DETECTIVE",
-            "start_sec": 30.03,
-            "end_sec": 40.04
-          },
-          {
-            "id": 5,
-            "text": "Main ne bolna shuru kiya, par flashes meri aankhon me bandh ho rahe the. Mera brain-OS ke param kehti hai ki yeh sab system-level betrayal hai. Agar us mastermind ki yaadein meri memory chips me clone ho gayi hain, to mere doston ki guarantee bhi khatam ho sakti hai. To main action mode me aayi, console par haath phaila, ek face-slap moment sabko chaukha diya. Ab main sirf truth ke raaste par chalne ko ready hoon abhi.",
-            "character": "DETECTIVE",
-            "start_sec": 40.04,
-            "end_sec": 50.05
-          },
-          {
-            "id": 6,
-            "text": "Ab meri raatein sirf memories ki raaz ke baare me hain. Agar yeh mastermind meri dimaag ki copy hai, to uski wajah mere future par nayi police knowledge ke roop me aayegi. Main is raaz ko public karne wala hoon, lekin pehle tum log se puchta hoon—kya tum samajh pa rahe hain ki memory ki asli mehnat kya hoti? Part 2 ka intezaar karo, kyunki sab kuch badal jayega! Tumhe is kahani ke aage jana, abhi saath.",
-            "character": "DETECTIVE",
-            "start_sec": 50.05,
-            "end_sec": 60.06
-          }
-        ]
-      },
+      "script": null,
       "voice": null,
       "images": null,
       "video": null,

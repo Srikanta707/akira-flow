@@ -1,359 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Akira Flow - Script Agent Studio</title>
-  <meta name="description" content="AI-powered scriptwriter agent for Akira Flow. Create, analyze, and estimate duration for professional video scripts.">
-  <link rel="stylesheet" href="style.css">
-  <style>
-    /* Styling for the new Toggle Switch and Dynamic elements */
-    .switch-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.85rem;
-      background: rgba(10, 10, 15, 0.5);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-    }
-    
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 46px;
-      height: 24px;
-    }
-    
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(255, 255, 255, 0.1);
-      transition: .4s;
-      border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 16px;
-      width: 16px;
-      left: 3px;
-      bottom: 3px;
-      background-color: var(--text-muted);
-      transition: .4s;
-      border-radius: 50%;
-    }
-    
-    input:checked + .slider {
-      background-color: rgba(0, 212, 255, 0.2);
-      border-color: var(--accent-cyan);
-    }
-    
-    input:checked + .slider:before {
-      transform: translateX(22px);
-      background-color: var(--accent-cyan);
-      box-shadow: 0 0 10px var(--accent-cyan);
-    }
-    
-    .switch-label-desc {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 0.25rem;
-    }
-    
-    .sub-genre-group {
-      display: none;
-      animation: fadeIn 0.3s ease-out;
-    }
-    
-    /* Research tab report styling */
-    .research-report-content {
-      padding: 1.25rem;
-      line-height: 1.7;
-      color: #d1d1eb;
-      font-size: 0.95rem;
-      max-height: 550px;
-      overflow-y: auto;
-    }
-    
-    .research-report-content h1, .research-report-content h2, .research-report-content h3 {
-      font-family: var(--font-title);
-      color: var(--accent-cyan);
-      margin-top: 1.5rem;
-      margin-bottom: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    
-    .research-report-content h1 { font-size: 1.3rem; border-bottom: 1px solid rgba(0, 212, 255, 0.2); padding-bottom: 0.25rem; }
-    .research-report-content h2 { font-size: 1.1rem; }
-    .research-report-content h3 { font-size: 0.95rem; color: var(--accent-pink); }
-    
-    .research-report-content ul, .research-report-content ol {
-      margin-left: 1.5rem;
-      margin-bottom: 1rem;
-    }
-    
-    .research-report-content li {
-      margin-bottom: 0.5rem;
-    }
-    
-    .research-report-content strong {
-      color: #fff;
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akira Flow | Script Agent Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --accent: #007AFF;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top right, #1a1a2e, #16213e, #0f3460);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .vision-container {
+            width: 90%;
+            max-width: 800px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent);
+            outline: none;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .btn-launch {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(0,122,255,0.3);
+        }
+
+        .btn-launch:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,122,255,0.4);
+        }
+
+        .result-panel {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            border: 1px solid var(--glass-border);
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.85rem;
+            color: #4cd964;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-
-  <header>
-    <div class="logo-container">
-      <h1 class="logo">Akira Flow</h1>
-      <span class="tagline">Create. Automate. Dominate.</span>
-      <div class="agent-badge">Agent 1 — Script Agent</div>
-    </div>
-  </header>
-
-  <main>
-    <!-- Left Column: Input Panel -->
-    <section class="glass-panel">
-      <h2 class="section-title">Script Parameters</h2>
-      
-      <!-- Notification Bar -->
-      <div id="notification-bar" class="notification">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span id="notification-msg"></span>
-      </div>
-
-      <form id="generator-form">
-        <!-- Topic/Idea text area -->
+    <div class="vision-container">
+        <h1>Akira Flow <span style="font-weight: 600;">Script Agent</span></h1>
+        
         <div class="form-group">
-          <label for="topic-input">Video Topic or Raw Idea</label>
-          <div class="input-glow-wrapper">
-            <textarea id="topic-input" placeholder="E.g., A dramatic sci-fi story about a time traveler who accidentally meets their past self in a cyberpunk Tokyo... or paste an outline." required></textarea>
-          </div>
+            <label>Topic / Prompt</label>
+            <input type="text" id="topic" placeholder="e.g. The secret history of Mars exploration">
         </div>
 
-        <!-- Plain script upload zone -->
-        <div class="form-group">
-          <label>Or Upload Text File</label>
-          <div class="file-upload-zone" id="drop-zone">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-            </svg>
-            <p>Drag & drop <strong>.txt</strong> file, or <strong>browse</strong></p>
-            <input type="file" id="file-input" accept=".txt">
-          </div>
-        </div>
-
-        <!-- Video Type -->
-        <div class="form-group">
-          <label for="video-type">Video Narrative Style</label>
-          <div class="input-glow-wrapper">
-            <select id="video-type">
-              <option value="youtube_hook">YouTube (Hook &amp; CTA)</option>
-              <option value="story_anime">Story &amp; Anime (Dramatic Arc)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Dynamic Anime Sub-Genre (visible when story_anime is active) -->
-        <div class="form-group sub-genre-group" id="sub-genre-form-group">
-          <label for="sub-genre-select">Anime Writing Skill Toolkit</label>
-          <div class="input-glow-wrapper">
-            <select id="sub-genre-select">
-              <option value="viral-story-framework">Universal Story Framework</option>
-              <!-- Dynamically populated from /api/anime-genres -->
-            </select>
-          </div>
-        </div>
-
-        <!-- Multi-Agent Research Switch -->
-        <div class="form-group">
-          <label>Research Pipeline</label>
-          <div class="switch-container">
-            <div>
-              <span style="font-size: 0.9rem; font-weight: 500;">Autonomous Research Agent</span>
-              <p class="switch-label-desc">Uses Gemini to gather shocking facts and gaps first</p>
+        <div style="display: flex; gap: 20px;">
+            <div class="form-group" style="flex: 1;">
+                <label>Video Type</label>
+                <select id="video_type">
+                    <option value="youtube_hook">YouTube Hook</option>
+                    <option value="story_anime">Anime Story</option>
+                </select>
             </div>
-            <label class="switch">
-              <input type="checkbox" id="research-switch">
-              <span class="slider"></span>
+            <div class="form-group" style="flex: 1;">
+                <label>Language</label>
+                <select id="language">
+                    <option value="english">English</option>
+                    <option value="hindi">Hindi (Hinglish)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Model</label>
+            <select id="model">
+                <option value="openai-fast">OpenAI Fast (Recommended)</option>
+                <option value="gemini">Gemini Reasoning</option>
+                <option value="mistral">Mistral Multi-lingual</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label style="display: flex; align-items: center; cursor: pointer;">
+                <input type="checkbox" id="research" style="width: auto; margin-right: 10px;"> Enable Autonomous Research
             </label>
-          </div>
         </div>
 
-        <!-- Duration Target -->
-        <div class="form-group">
-          <label for="duration-target">Target Duration</label>
-          <div class="input-glow-wrapper">
-            <select id="duration-target">
-              <option value="1 min">1 Minute (~460 words)</option>
-              <option value="3 min">3 Minutes (~1380 words)</option>
-              <option value="5 min">5 Minutes (~2300 words)</option>
-              <option value="10 min">10 Minutes (~4600 words)</option>
-            </select>
-          </div>
+        <button class="btn-launch" onclick="generate()">GENERATE SCRIPT</button>
+
+        <div class="loader" id="loader">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; opacity: 0.7;">Orchestrating AI Pipeline...</p>
         </div>
 
-        <!-- Language -->
-        <div class="form-group">
-          <label for="language-select">Output Language</label>
-          <div class="input-glow-wrapper">
-            <select id="language-select">
-              <option value="english">English</option>
-              <option value="hindi">Hindi / Hinglish (Roman Script)</option>
-            </select>
-          </div>
+        <div class="result-panel" id="result-panel">
+            <h3 style="margin-top: 0; font-weight: 400;">Pipeline Output</h3>
+            <pre id="output"></pre>
         </div>
+    </div>
 
-        <!-- AI Text Model -->
-        <div class="form-group">
-          <label for="model-select">AI Generation Model</label>
-          <div class="input-glow-wrapper">
-            <select id="model-select">
-              <!-- Dynamically populated -->
-              <option value="openai-fast">Loading models...</option>
-            </select>
-          </div>
-        </div>
+    <script>
+        async function generate() {
+            const topic = document.getElementById('topic').value;
+            const video_type = document.getElementById('video_type').value;
+            const language = document.getElementById('language').value;
+            const model = document.getElementById('model').value;
+            const enable_research = document.getElementById('research').checked;
 
-        <!-- Optional API Key -->
-        <div class="form-group">
-          <label for="api-key-input">Pollinations API Key (Optional)</label>
-          <div class="input-glow-wrapper">
-            <input type="password" id="api-key-input" placeholder="sk_xxxxxxxx (Saved in browser only)">
-          </div>
-        </div>
+            if (!topic) return alert('Please enter a topic!');
 
-        <!-- Submit Button -->
-        <div class="btn-3d-container">
-          <button type="submit" class="btn-3d" id="submit-btn">
-            <span>Generate Script</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </button>
-        </div>
-      </form>
-    </section>
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('result-panel').style.display = 'none';
 
-    <!-- Right Column: Live Workspace / Preview Panel -->
-    <section class="glass-panel output-container" id="preview-panel">
-      <!-- Loading Overlay -->
-      <div class="loading-overlay" id="loading-overlay">
-        <div class="spinner"></div>
-        <div class="loading-text" id="loading-status">Generating script...</div>
-      </div>
+            try {
+                const response = await fetch('/api/generate-script', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ topic, video_type, language, model, enable_research })
+                });
 
-      <h2 class="section-title">Agent Workspace</h2>
-
-      <!-- Empty State -->
-      <div class="empty-state" id="empty-state">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        <h3>No Script Generated Yet</h3>
-        <p>Configure the parameters on the left and click "Generate Script" to run the Script Agent.</p>
-      </div>
-
-      <!-- Main Results dashboard -->
-      <div class="script-dashboard" id="script-dashboard">
-        <!-- Stats Row -->
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="label">Word Count</div>
-            <div class="value" id="stat-words">0</div>
-          </div>
-          <div class="stat-card">
-            <div class="label">Estimated Duration</div>
-            <div class="value" id="stat-duration">0s</div>
-          </div>
-          <div class="stat-card">
-            <div class="label">Language</div>
-            <div class="value" id="stat-lang">-</div>
-          </div>
-          <div class="stat-card">
-            <div class="label">Type</div>
-            <div class="value" id="stat-type">-</div>
-          </div>
-        </div>
-
-        <h3 style="margin-bottom: 0.5rem; font-family: var(--font-title); font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase;">Characters Involved</h3>
-        <div class="character-list" id="characters-list-container">
-          <!-- Populated by JS -->
-        </div>
-
-        <!-- View Tabs -->
-        <div class="tabs-container">
-          <div class="tab active" data-tab="timeline-tab">Visual Timeline</div>
-          <div class="tab" data-tab="research-tab" id="research-tab-header" style="display: none;">Research Outline</div>
-          <div class="tab" data-tab="text-tab">Narrator Script</div>
-          <div class="tab" data-tab="json-tab">Raw Agent JSON</div>
-        </div>
-
-        <!-- Tab contents -->
-        <!-- 1. Visual Timeline -->
-        <div class="tab-content active" id="timeline-tab">
-          <div class="timeline" id="scenes-timeline">
-            <!-- Populated by JS -->
-          </div>
-        </div>
-
-        <!-- 2. Research Report (Conditional) -->
-        <div class="tab-content" id="research-tab">
-          <div class="code-container">
-            <div class="code-header">
-              <span class="code-lang">Autonomous Research report</span>
-              <button class="copy-btn" onclick="copyText('research-report-pre')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                Copy Report
-              </button>
-            </div>
-            <div class="research-report-content" id="research-report-pre"></div>
-          </div>
-        </div>
-
-        <!-- 3. Plain Text -->
-        <div class="tab-content" id="text-tab">
-          <div class="code-container">
-            <div class="code-header">
-              <span class="code-lang">Narrative Transcript</span>
-              <button class="copy-btn" onclick="copyText('plain-script-pre')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                Copy Script
-              </button>
-            </div>
-            <pre class="raw-text" id="plain-script-pre"></pre>
-          </div>
-        </div>
-
-        <!-- 4. Raw JSON -->
-        <div class="tab-content" id="json-tab">
-          <div class="code-container">
-            <div class="code-header">
-              <span class="code-lang">JSON Output Schema</span>
-              <button class="copy-btn" onclick="copyText('json-script-pre')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                Copy JSON
-              </button>
-            </div>
-            <pre><code id="json-script-pre"></code></pre>
-          </div>
-        </div>
-
-      </div>
-    </section>
-  </main>
-
-  <script src="script.js"></script>
+                const data = await response.json();
+                document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+                document.getElementById('result-panel').style.display = 'block';
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                document.getElementById('loader').style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>

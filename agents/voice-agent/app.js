@@ -351,7 +351,8 @@ app.post('/api/generate-voice', async (req, res) => {
 
     console.log(`Concatenating ${generatedFiles.length} files into Master Audio track...`);
     await new Promise((resolve, reject) => {
-      exec(`ffmpeg -f concat -safe 0 -i "${concatFilePath}" -c copy "${masterPath}"`, (error, stdout, stderr) => {
+      // Use re-encoding (-c:a libmp3lame) instead of copy to ensure sample rate consistency
+      exec(`ffmpeg -f concat -safe 0 -i "${concatFilePath}" -c:a libmp3lame -q:a 4 -y "${masterPath}"`, (error, stdout, stderr) => {
         try { fs.unlinkSync(concatFilePath); } catch (e) {}
         
         if (error) {
